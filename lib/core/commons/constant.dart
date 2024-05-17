@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:lexa/presentation/features/main/pages/setting_language_page.dart';
-import 'package:lexa/presentation/features/main/pages/setting_profile_page.dart';
+import 'package:lexa/presentation/screens/setting_language_screen.dart';
+import 'package:lexa/presentation/screens/setting_profile_screen.dart';
 
-import 'package:lexa/presentation/shared/widgets/loading_skeleton.dart';
-import 'package:lexa/presentation/shared/widgets/svg_icon.dart';
+import 'package:lexa/presentation/views/loading_skeleton.dart';
+import 'package:lexa/presentation/views/svg_icon.dart';
 
 List<Color?> multipleChoiceAnswerColors = [
   Colors.blue[500],
@@ -84,8 +84,7 @@ class MainPageConstants {
       icon: Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          decoration: BoxDecoration(
-              color: ColorConstants.primary, shape: BoxShape.circle),
+          decoration: BoxDecoration(color: ColorConstants.primary, shape: BoxShape.circle),
           padding: const EdgeInsets.all(18),
           child: SvgIcon(
             assetUrl: "assets/icons/plus_icon.svg",

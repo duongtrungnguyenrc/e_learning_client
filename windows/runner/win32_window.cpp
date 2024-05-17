@@ -100,7 +100,7 @@ const wchar_t* WindowClassRegistrar::GetWindowClass() {
     window_class.hbrBackground = 0;
     window_class.lpszMenuName = nullptr;
     window_class.lpfnWndProc = Win32Window::WndProc;
-    RegisterClass(&window_class);
+    SignUpClass(&window_class);
     class_registered_ = true;
   }
   return kWindowClassName;

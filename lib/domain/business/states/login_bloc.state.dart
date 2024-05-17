@@ -1,4 +1,4 @@
-import 'package:lexa/data/dtos/login_response.dto.dart';
+import 'package:lexa/data/dtos/sign_in_response.dto.dart';
 
 abstract class AuthState {}
 
@@ -7,7 +7,7 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class AuthSuccess extends AuthState {
-  final LoginResponseDto response;
+  final SignInResponseDto response;
 
   AuthSuccess(this.response);
 }

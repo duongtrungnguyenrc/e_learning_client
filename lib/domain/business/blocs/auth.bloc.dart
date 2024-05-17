@@ -10,7 +10,7 @@ import 'package:lexa/domain/repositories/auth.repository.dart';
 import 'package:lexa/core/exceptions/network.exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:lexa/data/dtos/login_response.dto.dart';
+import 'package:lexa/data/dtos/sign_in_response.dto.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
@@ -55,7 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleAuth>(
       (event, emit) async {
         emit(AuthLoading());
-        final loginUrl = await AuthRepository.getGoogleLoginUrl();
+        final loginUrl = await AuthRepository.getGoogleSignInUrl();
         emit(GoogleAuthUrl(url: loginUrl));
       },
     );
@@ -65,7 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final loginResponse = BaseResponse.fromMap(
             json.decode(event.uri.queryParameters['payload'] ?? "")
                 as Map<String, dynamic>,
-            LoginResponseDto.fromMap);
+            SignInResponseDto.fromMap);
         final prefs = await SharedPreferences.getInstance();
         prefs.setString("access_token", loginResponse.data.accessToken);
         prefs.setString("user_profile", loginResponse.data.user.toJson());

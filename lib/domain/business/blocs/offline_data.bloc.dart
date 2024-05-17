@@ -4,7 +4,7 @@ import 'package:lexa/data/models/topic.model.dart';
 import 'package:lexa/data/models/vocabulary.model.dart';
 import 'package:lexa/domain/business/events/offline_data_bloc.event.dart';
 import 'package:lexa/domain/business/states/offline_data_bloc.state.dart';
-import 'package:lexa/utils/local_database_helper.utils.dart';
+import 'package:lexa/domain/utils/local_database_helper.utils.dart';
 
 class OfflineDataBloc extends Bloc<OfflineDataEvent, OfflineDataState> {
   final _localDbHelper = LocalDatabaseHelper();

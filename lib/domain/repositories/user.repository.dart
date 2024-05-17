@@ -1,4 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:lexa/data/dtos/create_forgot_password_transaction_response.dto.dart';
+import 'package:lexa/data/dtos/destroy_forgot_password.dto.dart';
+import 'package:lexa/data/dtos/reset_passord.dto.dart';
+import 'package:lexa/data/dtos/sign_up_request.dto.dart';
 import 'package:lexa/data/models/user.model.dart';
 import 'package:lexa/domain/api/api.dart';
 import 'package:lexa/data/dtos/base_response.dto.dart';
@@ -8,8 +12,17 @@ import 'package:lexa/core/exceptions/network.exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
-  static Future<BaseResponse<List<Topic>, Topic>>
-      loadAuthenticatedProfileTopics() async {
+  static Future<BaseResponse<User, Object>> signUp(
+    SignUpRequestDto payload,
+  ) async {
+    final response = await api.post("/user/sign-up", data: payload.toMap());
+    return BaseResponse<User, Object>.fromMap(
+      response.data,
+      User.fromMap,
+    );
+  }
+
+  static Future<BaseResponse<List<Topic>, Topic>> loadAuthenticatedProfileTopics() async {
     try {
       final sharedPreferences = await SharedPreferences.getInstance();
       String? accessToken = sharedPreferences.getString("access_token");
@@ -23,8 +36,7 @@ class UserRepository {
         ),
       );
 
-      return BaseResponse<List<Topic>, Topic>.fromMap(
-          response.data, Topic.fromMap);
+      return BaseResponse<List<Topic>, Topic>.fromMap(response.data, Topic.fromMap);
     } on DioException catch (e) {
       throw NetworkException(
         statusCode: e.response?.statusCode,
@@ -52,8 +64,7 @@ class UserRepository {
         ),
       );
 
-      return BaseResponse<Profile, Object>.fromMap(
-          response.data, Profile.fromMap);
+      return BaseResponse<Profile, Object>.fromMap(response.data, Profile.fromMap);
     } on DioException catch (e) {
       throw NetworkException(
         statusCode: e.response?.statusCode,
@@ -76,5 +87,43 @@ class UserRepository {
     );
 
     return BaseResponse<List<User>, User>.fromMap(response.data, User.fromMap);
+  }
+
+  static Future<BaseResponse<List<User>, User>> findAccounts(String? key) async {
+    final response = await api.get("/user/find-accounts", queryParameters: {"key": key});
+
+    return BaseResponse<List<User>, User>.fromMap(response.data, User.fromMap);
+  }
+
+  static Future<BaseResponse<CreateForgotPasswordTransactionResponseDto, Object>> createForgotPasswordTransaction(
+      String userId) async {
+    final response = await api.get("/user/forgot-password", data: {"userId": userId});
+
+    return BaseResponse<CreateForgotPasswordTransactionResponseDto, Object>.fromMap(
+      response.data,
+      CreateForgotPasswordTransactionResponseDto.fromMap,
+    );
+  }
+
+  static Future<BaseResponse<dynamic, Object>> destroyForgotPasswordTransaction(
+      DestroyForgotPasswordTransactionDto payload) async {
+    final response = await api.delete("/user/forgot-password", queryParameters: payload.toMap());
+
+    return BaseResponse<dynamic, Object>.fromMap(
+      response.data,
+      null,
+    );
+  }
+
+  static Future<BaseResponse<dynamic, dynamic>> resetPassword(ResetPasswordDto payload) async {
+    final response = await api.post(
+      "/user/reset-password",
+      data: payload.toMap(),
+    );
+
+    return BaseResponse<dynamic, dynamic>.fromMap(
+      response.data,
+      null,
+    );
   }
 }
