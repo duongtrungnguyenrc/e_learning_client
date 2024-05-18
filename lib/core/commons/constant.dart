@@ -239,3 +239,6 @@ const languages = [
 ];
 
 const messagesLimit = 20;
+
+
+enum LearningMethod { METHOD_FLASH_CARD, METHOD_MULTIPLE_CHOICE, METHOD_TYPING }

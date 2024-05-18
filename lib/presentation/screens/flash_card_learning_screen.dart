@@ -39,13 +39,6 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
   void initState() {
     super.initState();
     _learningBloc = context.read<LearningBloc>();
-
-    _learningBloc.add(
-      CreateLearningSession(
-        method: "METHOD_FLASH_CARD",
-        topicId: widget.topic.id,
-      ),
-    );
   }
 
   void _handlePrevPage() {
@@ -57,13 +50,21 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
     });
   }
 
-  void _handleNextPage() {
-    setState(() {
-      if (_currentIndex < widget.topic.vocabularies.length - 1) {
+  void _handleNextPage(bool isDone) {
+    if (_currentIndex < widget.topic.vocabularies.length - 1) {
+      _learningBloc.add(
+        LearningRecord(
+          widget.topic.vocabularies[_currentIndex].id,
+          _learningBloc.state.getNode(widget.topic.id)?.id,
+          widget.topic.vocabularies[_currentIndex].meaning,
+          isDone,
+        ),
+      );
+      setState(() {
         _currentIndex += 1;
         _handleSpeak();
-      }
-    });
+      });
+    }
   }
 
   void _handleRepeat() {
@@ -85,7 +86,7 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
       if (_currentIndex == widget.topic.vocabularies.length - 1) {
         _stopTimer();
       } else {
-        _handleNextPage();
+        _handleNextPage(true);
       }
     });
   }
@@ -167,7 +168,7 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
     void handleStopDrag() {
       setState(() {
         if (_dragDirection != DragDirection.center) {
-          _handleNextPage();
+          _handleNextPage(_dragDirection == DragDirection.left);
         }
         _dragDirection = DragDirection.center;
       });
@@ -217,7 +218,7 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
             isAutomationMode: _isAutomationMode,
             onPrev: _handlePrevPage,
             onRepeat: _handleRepeat,
-            onNext: _handleNextPage,
+            onNext: () => _handleNextPage(true),
             onPlaySound: _handleSpeak,
           ),
         ],

@@ -12,8 +12,8 @@ class LearningState {
   }) : _learningSessionGraph =
             Map<String, LearningSession>.from(learningSessionGraph ?? {});
 
-  LearningSession? getNode(String? roomId) {
-    return _learningSessionGraph[roomId];
+  LearningSession? getNode(String? id) {
+    return _learningSessionGraph[id];
   }
 
   LearningState copyWith({

@@ -17,3 +17,17 @@ class LoadLearningHistory extends LearningEvent {
     required this.topicId,
   });
 }
+
+class LearningRecord extends LearningEvent {
+  final String? vocabularyId;
+  final String? sessionId;
+  final String? answer;
+  final bool istrue;
+
+  LearningRecord(
+    this.vocabularyId,
+    this.sessionId,
+    this.answer,
+    this.istrue,
+  );
+}

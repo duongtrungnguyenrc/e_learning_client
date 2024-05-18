@@ -1,18 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:lexa/core/commons/constant.dart';
 
 class CountDownClock extends StatefulWidget {
   final Duration interval;
   final String? title;
   final VoidCallback? onDone;
+  final TextStyle? textStyle;
 
   const CountDownClock({
     Key? key,
     required this.interval,
     this.title,
     this.onDone,
+    this.textStyle,
   }) : super(key: key);
 
   @override
@@ -65,13 +69,12 @@ class _CountDownClockState extends State<CountDownClock> {
     if (_currentTime.inSeconds != 0) {
       return _currentTime.inSeconds.remainder(60).toString().padLeft(2, '0');
     }
-    return '';
+    return '0';
   }
 
   @override
   Widget build(BuildContext context) {
-    String formattedTime =
-        '${_getFormattedHours()}${_getFormattedMinutes()}${_getFormattedSeconds()}';
+    String formattedTime = '${_getFormattedHours()}${_getFormattedMinutes()}${_getFormattedSeconds()}';
 
     return RichText(
       text: TextSpan(
@@ -83,9 +86,10 @@ class _CountDownClockState extends State<CountDownClock> {
         children: <TextSpan>[
           TextSpan(text: widget.title),
           TextSpan(
-            style: TextStyle(
-              color: ColorConstants.red,
-            ),
+            style: widget.textStyle ??
+                TextStyle(
+                  color: ColorConstants.red,
+                ),
             text: formattedTime,
           ),
         ],

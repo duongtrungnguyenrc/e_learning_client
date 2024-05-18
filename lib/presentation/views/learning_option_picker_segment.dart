@@ -1,5 +1,6 @@
+import 'package:lexa/core/commons/constant.dart';
+import 'package:lexa/presentation/screens/learning_count_down_screen.dart';
 import 'package:lexa/presentation/views/learning_option_item.dart';
-import 'package:lexa/presentation/screens/flash_card_learning_screen.dart';
 import 'package:lexa/presentation/screens/multiple_choice_learning_screen.dart';
 import 'package:lexa/data/models/topic.model.dart';
 import 'package:lexa/presentation/views/segment_header.dart';
@@ -28,7 +29,10 @@ class LearningOptionPickerSegment extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => FlashCardLearningPage(topic: topic),
+                builder: (context) => LearningCountDownScreen(
+                  topic: topic,
+                  learningMethod: LearningMethod.METHOD_FLASH_CARD,
+                ),
               ),
             );
           },
@@ -43,7 +47,10 @@ class LearningOptionPickerSegment extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MultipleChoiceLearningPage(),
+                builder: (context) => LearningCountDownScreen(
+                  topic: topic,
+                  learningMethod: LearningMethod.METHOD_MULTIPLE_CHOICE,
+                ),
               ),
             );
           },

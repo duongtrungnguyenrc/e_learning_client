@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lexa/data/dtos/create_learning_record.dto.dart';
 import 'package:lexa/data/dtos/create_learning_session.dto.dart';
 import 'package:lexa/data/models/learning_session.model.dart';
 import 'package:lexa/domain/business/events/learning_bloc.event.dart';
@@ -41,6 +42,17 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
       }).whenComplete(() {
         emit(state.onLoading(false));
       });
+    });
+
+    on<LearningRecord>((event, emit) async {
+      await LearningRepository.createLearningRecord(
+        CreateLearningRecordDto(
+          sessionId: event.sessionId ?? "",
+          vocabularyId: event.vocabularyId ?? "",
+          isTrue: event.istrue,
+          answer: event.answer ?? "",
+        ),
+      );
     });
   }
 }
