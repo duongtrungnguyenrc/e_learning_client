@@ -32,7 +32,7 @@ class Topic extends BaseModel {
   }) : author = author ?? User();
   @override
   String toString() {
-    return toJson();
+    return 'Topic(name: $name, description: $description, visibility: $visibility, thumbnail: $thumbnail, createdTime: $createdTime, vocabularies: $vocabularies, author: $author, folder: $folder, isDownloaded: $isDownloaded, learningSessions: $learningSessions)';
   }
 
   Map<String, dynamic> toMap() {

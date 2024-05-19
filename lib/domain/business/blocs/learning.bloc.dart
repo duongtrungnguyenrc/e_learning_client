@@ -1,7 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lexa/data/dtos/create_learning_record.dto.dart';
 import 'package:lexa/data/dtos/create_learning_session.dto.dart';
-import 'package:lexa/data/models/learning_session.model.dart';
 import 'package:lexa/domain/business/events/learning_bloc.event.dart';
 import 'package:lexa/domain/business/states/learning_bloc.state.dart';
 import 'package:lexa/domain/repositories/learning.repository.dart';
@@ -13,11 +13,10 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
 
       await LearningRepository.getLearningHistory(event.topicId ?? "").then(
         (response) {
-          emit(state.addNodes(response.data as List<LearningSession>));
+          emit(state.addNodes(response.data));
         },
-      ).catchError(
-        (error) {
-          print(error);
+      ).onError(
+        (error, stackTrace) {
           emit(state.onError(error));
         },
       ).whenComplete(
@@ -44,7 +43,7 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
       });
     });
 
-    on<LearningRecord>((event, emit) async {
+    on<LearningVocabularyRecord>((event, emit) async {
       await LearningRepository.createLearningRecord(
         CreateLearningRecordDto(
           sessionId: event.sessionId ?? "",
@@ -52,7 +51,17 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
           isTrue: event.istrue,
           answer: event.answer ?? "",
         ),
-      );
+      ).then((response) {
+        emit(
+          state.addRecord(
+            event.topicId,
+            event.sessionId ?? "",
+            response.data,
+          ),
+        );
+      }).onError((DioException e, stackTrace) {
+        print(e);
+      });
     });
   }
 }

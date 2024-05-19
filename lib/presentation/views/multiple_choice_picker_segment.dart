@@ -1,21 +1,29 @@
+import 'dart:async';
+
 import 'package:lexa/core/commons/constant.dart';
+import 'package:lexa/data/models/multiple_choice_answer.model.dart';
+import 'package:lexa/domain/utils/sound.utils.dart';
 import 'package:lexa/presentation/views/primary_button.dart';
 import 'package:lexa/presentation/views/svg_icon.dart';
 import 'package:flutter/material.dart';
 
 class MultipleChoicePickerSegment extends StatefulWidget {
-  final List? answers;
+  final List<MultipleChoiceAnswer> answers;
+  final Function(String answer, bool isTrue) onSelect;
 
   const MultipleChoicePickerSegment({
     super.key,
-    this.answers,
+    required this.answers,
+    required this.onSelect,
   });
 
   @override
-  State<MultipleChoicePickerSegment> createState() => _MultipleChoicePickerSegmentState();
+  State<MultipleChoicePickerSegment> createState() =>
+      _MultipleChoicePickerSegmentState();
 }
 
-class _MultipleChoicePickerSegmentState extends State<MultipleChoicePickerSegment> {
+class _MultipleChoicePickerSegmentState
+    extends State<MultipleChoicePickerSegment> {
   int selectedIndex = -1;
   List<Color?> colors = [
     Colors.blue[500],
@@ -51,16 +59,33 @@ class _MultipleChoicePickerSegmentState extends State<MultipleChoicePickerSegmen
                           selectedIndex = -1;
                         } else {
                           selectedIndex = index;
+                          if (widget.answers[selectedIndex].isTrue) {
+                            SoundUtil().playSound("/sounds/correct_sound.mp3");
+                          } else {
+                            SoundUtil()
+                                .playSound("/sounds/incorrect_sound.mp3");
+                          }
+
+                          Timer(const Duration(seconds: 2), () {
+                            widget.onSelect(
+                              widget.answers[selectedIndex].content,
+                              widget.answers[selectedIndex].isTrue,
+                            );
+                          });
                         }
                       });
                     },
                     borderRadius: 20,
-                    backgroundColor: (selectedIndex == index)
-                        ? Colors.green[500]
-                        : (selectedIndex != -1 ? const Color.fromARGB(255, 199, 17, 4) : colors[index]),
-                    overlayColor: Colors.green[300],
+                    backgroundColor: (selectedIndex == -1)
+                        ? colors[index]
+                        : (widget.answers[selectedIndex].isTrue &&
+                                    selectedIndex == index ||
+                                widget.answers[index].isTrue
+                            ? Colors.green[500]
+                            : const Color.fromARGB(255, 199, 17, 4)),
+                    overlayColor: Colors.blue,
                     child: Text(
-                      "Hello",
+                      widget.answers[index].content,
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,

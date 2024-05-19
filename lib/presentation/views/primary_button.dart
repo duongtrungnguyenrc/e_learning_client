@@ -49,14 +49,14 @@ class PrimaryButton extends StatelessWidget {
       return OutlinedButton(
         onPressed: enabled ^ loading ? onPressed : null,
         style: ButtonStyle(
-          padding: WidgetStateProperty.all(
+          padding: MaterialStateProperty.all(
             padding ??
                 const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 20,
                 ),
           ),
-          shape: WidgetStateProperty.all(
+          shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
               side: BorderSide(
@@ -65,7 +65,7 @@ class PrimaryButton extends StatelessWidget {
               ),
             ),
           ),
-          minimumSize: WidgetStateProperty.all(
+          minimumSize: MaterialStateProperty.all(
             Size(size ?? ButtonSize.auto, double.minPositive),
           ),
         ),
@@ -102,28 +102,28 @@ class PrimaryButton extends StatelessWidget {
       return ElevatedButton(
         onPressed: enabled ^ loading ? onPressed : null,
         style: ButtonStyle(
-          padding: WidgetStateProperty.all(
+          padding: MaterialStateProperty.all(
             padding ??
                 const EdgeInsets.symmetric(
                   vertical: 10,
                   horizontal: 20,
                 ),
           ),
-          shape: WidgetStateProperty.all(
+          shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
             ),
           ),
-          minimumSize: WidgetStateProperty.all(
+          minimumSize: MaterialStateProperty.all(
             Size(size ?? ButtonSize.auto, double.minPositive),
           ),
-          backgroundColor: WidgetStateProperty.all<Color>(
+          backgroundColor: MaterialStateProperty.all<Color>(
             backgroundColor ??
                 (style == PrimaryButtonStyle.contained
                     ? ColorConstants.primary
                     : ColorConstants.white),
           ),
-          overlayColor: WidgetStateProperty.all<Color>(
+          overlayColor: MaterialStateProperty.all<Color>(
             overlayColor ?? ColorConstants.lightPrimary,
           ),
         ),

@@ -10,6 +10,7 @@ class CountDownClock extends StatefulWidget {
   final String? title;
   final VoidCallback? onDone;
   final TextStyle? textStyle;
+  final VoidCallback? onDown;
 
   const CountDownClock({
     Key? key,
@@ -17,6 +18,7 @@ class CountDownClock extends StatefulWidget {
     this.title,
     this.onDone,
     this.textStyle,
+    this.onDown,
   }) : super(key: key);
 
   @override
@@ -33,10 +35,12 @@ class _CountDownClockState extends State<CountDownClock> {
 
     _currentTime = widget.interval;
 
+    if (widget.onDown != null) widget.onDown!();
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       setState(() {
         if (_currentTime.inSeconds > 0) {
           _currentTime -= const Duration(seconds: 1);
+          if (widget.onDown != null) widget.onDown!();
         } else {
           if (widget.onDone != null) widget.onDone!();
           _timer.cancel();
@@ -74,7 +78,8 @@ class _CountDownClockState extends State<CountDownClock> {
 
   @override
   Widget build(BuildContext context) {
-    String formattedTime = '${_getFormattedHours()}${_getFormattedMinutes()}${_getFormattedSeconds()}';
+    String formattedTime =
+        '${_getFormattedHours()}${_getFormattedMinutes()}${_getFormattedSeconds()}';
 
     return RichText(
       text: TextSpan(

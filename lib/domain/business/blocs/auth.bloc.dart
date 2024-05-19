@@ -19,11 +19,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthLoading());
 
         try {
-          final res = await AuthRepository.auth(event.email, event.password);
+          final res = await AuthRepository.signIn(event.email, event.password);
           final prefs = await SharedPreferences.getInstance();
           prefs.setString("access_token", res.data.accessToken);
           prefs.setString("refresh_token", res.data.refreshToken);
-
+  
           emit(AuthSuccess(res.data));
         } on DioException catch (e) {
           emit(AuthFail(message: e.message ?? "Undefine error"));
@@ -73,5 +73,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthSuccess(loginResponse.data));
       },
     );
+    on<SignOut>((emit, event) {
+      AuthRepository.signOut;
+    });
   }
 }

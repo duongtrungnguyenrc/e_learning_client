@@ -1,5 +1,6 @@
 import 'package:lexa/core/commons/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:lexa/domain/utils/sound.utils.dart';
 
 class FlipCard extends StatefulWidget {
   final Widget front;
@@ -15,7 +16,8 @@ class FlipCard extends StatefulWidget {
   createState() => _FlipCardState();
 }
 
-class _FlipCardState extends State<FlipCard> with SingleTickerProviderStateMixin {
+class _FlipCardState extends State<FlipCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   bool _isFront = true;
@@ -49,6 +51,7 @@ class _FlipCardState extends State<FlipCard> with SingleTickerProviderStateMixin
       }
       _isFront = !_isFront;
     }
+    SoundUtil().playSound("/sounds/flip_sound.mp3");
   }
 
   @override

@@ -15,9 +15,8 @@ class OfflineDataBloc extends Bloc<OfflineDataEvent, OfflineDataState> {
     on<SaveTopic>((event, emit) async {
       emit(state.copyWith(loading: true));
 
-      final authorId = await _localDbHelper.insert("user", event.topic.author.toMap());
-      final folderId =
-          event.topic.folder != null ? await _localDbHelper.insert("folder", event.topic.folder!.toMap()) : null;
+      final authorId =
+          await _localDbHelper.insert("user", event.topic.author.toMap());
 
       final topicId = await _localDbHelper.insert('topic', {
         'id': event.topic.id,
@@ -27,7 +26,6 @@ class OfflineDataBloc extends Bloc<OfflineDataEvent, OfflineDataState> {
         'thumbnail': event.topic.thumbnail,
         'createdTime': event.topic.createdTime,
         'authorId': authorId,
-        'folderId': folderId,
       });
 
       for (Vocabulary vocabulary in event.topic.vocabularies) {
@@ -54,34 +52,39 @@ class OfflineDataBloc extends Bloc<OfflineDataEvent, OfflineDataState> {
       }
 
       emit(state.addNode(event.topic));
-
-      state.printGraph();
     });
   }
 
   void _loadSavedTopics() async {
     final topicsData = await _localDbHelper.query("topic").select([]).execute();
 
-    final topics = await Future.wait(topicsData.map<Future<Topic>>((topic) async {
-      final visibility = int.parse(topic['visibility'].toString()) == 0 ? false : true;
-      final author = await _localDbHelper.query("user").select([]).where({'id': topic['authorId']}).execute();
-      final vocabularies =
-          await _localDbHelper.query("vocabulary").select([]).where({'topicId': topic['id']}).execute();
+    final topics =
+        await Future.wait(topicsData.map<Future<Topic>>((topic) async {
+      final visibility =
+          int.parse(topic['visibility'].toString()) == 0 ? false : true;
+      final author = await _localDbHelper
+          .query("user")
+          .select([]).where({'id': topic['authorId']}).execute();
+      final vocabularies = await _localDbHelper
+          .query("vocabulary")
+          .select([]).where({'topicId': topic['id']}).execute();
 
       return Topic.fromMap({
         ...topic,
         '_id': topic['id'],
         'visibility': visibility,
         'author': author.isNotEmpty ? author[0] : null,
-        'vocabularies': await Future.wait(vocabularies.map<Future<Map<String, dynamic>>>((vocabulary) async {
+        'vocabularies': await Future.wait(
+            vocabularies.map<Future<Map<String, dynamic>>>((vocabulary) async {
           final answers = (await _localDbHelper
-                .query("multiple_choice_answer")
-                .select([]).where({'vocabularyId': vocabulary['id']})
-                .execute())
+                  .query("multiple_choice_answer")
+                  .select([]).where(
+                      {'vocabularyId': vocabulary['id']}).execute())
               .map((answer) {
             return {
               ...answer,
-              'isTrue': int.parse(answer['isTrue'].toString()) == 0 ? false : true,
+              'isTrue':
+                  int.parse(answer['isTrue'].toString()) == 0 ? false : true,
             };
           });
 

@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lexa/core/configs/app_localization.dart';
 import 'package:lexa/core/commons/constant.dart';
+import 'package:lexa/data/models/profile.model.dart';
 import 'package:lexa/domain/business/blocs/auth.bloc.dart';
+import 'package:lexa/domain/business/blocs/profile.bloc.dart';
 import 'package:lexa/domain/business/events/login_bloc.event.dart';
+import 'package:lexa/domain/business/events/profile_bloc.event.dart';
 import 'package:lexa/domain/business/states/login_bloc.state.dart';
 import 'package:lexa/presentation/screens/sign_up_screen.dart';
 import 'package:lexa/presentation/views/auth_bottom.dart';
@@ -25,10 +28,16 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final _emailTextEditingController = TextEditingController()
-    ..text = "duongtrungnguyen00@gmail.com";
-  final _passwordTextEditingController = TextEditingController()
-    ..text = "nguyendeptrai";
+  final _emailTextEditingController = TextEditingController();
+  final _passwordTextEditingController = TextEditingController();
+
+  late ProfileBloc _profileBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _profileBloc = context.read<ProfileBloc>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +48,9 @@ class _SignInScreenState extends State<SignInScreen> {
         if (state is AuthLoading) {
           _showLoading(context);
         } else if (state is AuthSuccess) {
+          _profileBloc.add(LoadProfile(id: state.response.user.id));
           Navigator.pop(context);
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const MainPage(),

@@ -53,7 +53,7 @@ class _LaunchPageState extends State<LaunchPage> {
       if (state is AuthSuccess) {
         _navigation(const MainPage());
       } else if (state is AuthFail) {
-        _navigation(_isFirstLaunch ? const IntroPage() : const SignInScreen());
+        _navigation(IntroPage());
       }
 
       return Scaffold(

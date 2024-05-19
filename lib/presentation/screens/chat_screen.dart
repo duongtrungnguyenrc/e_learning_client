@@ -10,8 +10,8 @@ import 'package:lexa/domain/business/events/chat_bloc.event.dart';
 import 'package:lexa/domain/business/states/chat_bloc.state.dart';
 import 'package:lexa/presentation/views/chat_app_bar.dart';
 import 'package:lexa/presentation/views/chat_profile.dart';
-import 'package:lexa/presentation/views/input_segment.dart';
-import 'package:lexa/presentation/views/message.dart';
+import 'package:lexa/presentation/views/chat_input_segment.dart';
+import 'package:lexa/presentation/views/chat_message.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class ChatScreen extends StatefulWidget {

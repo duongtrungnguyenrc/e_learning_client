@@ -65,8 +65,9 @@ class ConfirmDialog extends StatelessWidget {
                 Expanded(
                   child: TextButton(
                     style: ButtonStyle(
-                      padding: const WidgetStatePropertyAll(EdgeInsets.all(10)),
-                      shape: WidgetStateProperty.all(
+                      padding:
+                          const MaterialStatePropertyAll(EdgeInsets.all(10)),
+                      shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         ),
@@ -101,8 +102,9 @@ class ConfirmDialog extends StatelessWidget {
                       Navigator.pop(context);
                     },
                     style: ButtonStyle(
-                      padding: const WidgetStatePropertyAll(EdgeInsets.all(10)),
-                      shape: WidgetStateProperty.all(
+                      padding:
+                          const MaterialStatePropertyAll(EdgeInsets.all(10)),
+                      shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         ),

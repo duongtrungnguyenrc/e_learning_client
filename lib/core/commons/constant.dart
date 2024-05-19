@@ -84,7 +84,8 @@ class MainPageConstants {
       icon: Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          decoration: BoxDecoration(color: ColorConstants.primary, shape: BoxShape.circle),
+          decoration: BoxDecoration(
+              color: ColorConstants.primary, shape: BoxShape.circle),
           padding: const EdgeInsets.all(18),
           child: SvgIcon(
             assetUrl: "assets/icons/plus_icon.svg",
@@ -240,5 +241,74 @@ const languages = [
 
 const messagesLimit = 20;
 
+enum LearningMethod {
+  METHOD_FLASH_CARD,
+  METHOD_MULTIPLE_CHOICE,
+  METHOD_TYPING,
+  METHOD_UNKNOWN,
+}
 
-enum LearningMethod { METHOD_FLASH_CARD, METHOD_MULTIPLE_CHOICE, METHOD_TYPING }
+extension LearningMethodExtension on LearningMethod {
+  String get description {
+    switch (this) {
+      case LearningMethod.METHOD_FLASH_CARD:
+        return 'Flash Card';
+      case LearningMethod.METHOD_MULTIPLE_CHOICE:
+        return 'Multiple Choice';
+      case LearningMethod.METHOD_TYPING:
+        return 'Typing';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  static LearningMethod? fromString(String value) {
+    switch (value) {
+      case 'METHOD_FLASH_CARD':
+        return LearningMethod.METHOD_FLASH_CARD;
+      case 'METHOD_MULTIPLE_CHOICE':
+        return LearningMethod.METHOD_MULTIPLE_CHOICE;
+      case 'METHOD_TYPING':
+        return LearningMethod.METHOD_TYPING;
+      default:
+        return LearningMethod.METHOD_UNKNOWN;
+    }
+  }
+
+  String getString() {
+    return description;
+  }
+}
+
+class LearningMethodWrapper {
+  final LearningMethod method;
+
+  LearningMethodWrapper(this.method);
+
+  @override
+  String toString() {
+    switch (method) {
+      case LearningMethod.METHOD_FLASH_CARD:
+        return 'Flash Card';
+      case LearningMethod.METHOD_MULTIPLE_CHOICE:
+        return 'Multiple Choice';
+      case LearningMethod.METHOD_TYPING:
+        return 'Typing';
+      default:
+        return 'Unknown Method';
+    }
+  }
+
+  String toRawString() {
+    switch (method) {
+      case LearningMethod.METHOD_FLASH_CARD:
+        return 'METHOD_FLASH_CARD';
+      case LearningMethod.METHOD_MULTIPLE_CHOICE:
+        return 'METHOD_MULTIPLE_CHOICE';
+      case LearningMethod.METHOD_TYPING:
+        return 'METHOD_TYPING';
+      default:
+        return 'Unknown Method';
+    }
+  }
+}

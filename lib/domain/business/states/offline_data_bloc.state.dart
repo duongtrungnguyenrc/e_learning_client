@@ -14,8 +14,14 @@ class OfflineDataState {
   }
 
   OfflineDataState addNode(Topic node) {
-    savedTopics[node.id] = node;
-    return this;
+    final newGraph = Map<String, Topic>.from(savedTopics);
+    newGraph.update(
+      node.id,
+      (_) => node,
+      ifAbsent: () => node,
+    );
+
+    return copyWith(savedTopics: newGraph);
   }
 
   OfflineDataState removeNode(String nodeId) {

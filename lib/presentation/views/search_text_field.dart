@@ -49,7 +49,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
 
     if (widget.onFocusChange != null) {
       widget.onFocusChange!(_focusNode.hasFocus);
-    };
+    }
   }
 
   @override

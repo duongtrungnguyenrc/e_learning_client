@@ -121,6 +121,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           children: [
                             Expanded(
                               child: AuthTextField(
+                                isPassword: true,
                                 controller: _passwordController,
                                 onChanged: (value) {},
                                 hintText: appLocalizations.getByKey("password"),
@@ -140,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             Expanded(
                               child: AuthTextField(
-                                onChanged: (value) {},
+                                isPassword: true,
                                 hintText: appLocalizations.getByKey(
                                   "confirm_password",
                                 ),

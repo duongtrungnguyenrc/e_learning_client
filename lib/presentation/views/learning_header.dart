@@ -41,7 +41,7 @@ class LearningHeader extends StatelessWidget implements PreferredSizeWidget {
             TextButton(
               onPressed: () {},
               style: ButtonStyle(
-                  overlayColor: WidgetStateProperty.all(
+                  overlayColor: MaterialStateProperty.all(
                 ColorConstants.primaryGrey,
               )),
               child: Text(

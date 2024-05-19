@@ -48,10 +48,20 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
     super.initState();
 
     _controller.addListener(() {
-      setState(() {
-        _isBottomPosition = _controller.offset >=
-            _mediaQueryData.size.height / 4 - _mediaQueryData.padding.top;
-      });
+      if (_controller.offset >=
+          _mediaQueryData.size.height / 4 - _mediaQueryData.padding.top) {
+        if (_isBottomPosition == false) {
+          setState(() {
+            _isBottomPosition = true;
+          });
+        }
+      } else {
+        if (_isBottomPosition == true) {
+          setState(() {
+            _isBottomPosition = false;
+          });
+        }
+      }
     });
 
     _topicBloc = context.read<TopicBloc>();
@@ -66,7 +76,9 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
 
     final Topic? topic = _topicBloc.state.getNode(widget.id) ?? widget.topic;
     _learningBloc = context.read<LearningBloc>();
-    _learningBloc.add(LoadLearningHistory(topicId: topic?.id));
+    if (topic != null) {
+      _learningBloc.add(LoadLearningHistory(topicId: topic.id));
+    }
   }
 
   @override
@@ -79,8 +91,7 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<TopicBloc, TopicState>(
       builder: (context, state) {
-        final Topic? topic =
-            _topicBloc.state.getNode(widget.id) ?? widget.topic;
+        final Topic? topic = state.getNode(widget.id) ?? widget.topic;
 
         return Scaffold(
           appBar: BackAppBar(

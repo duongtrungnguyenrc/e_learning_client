@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:lexa/data/dtos/learning_record.model.dart';
 import 'package:lexa/data/models/base.model.dart';
+import 'package:lexa/data/models/learning_record.model.dart';
 import 'package:lexa/data/models/topic.model.dart';
 import 'package:lexa/data/models/user.model.dart';
 
@@ -33,7 +33,7 @@ class LearningSession extends BaseModel {
 
   factory LearningSession.fromMap(Map<String, dynamic> map) {
     return LearningSession(
-      id: map['id'].toString(),
+      id: map['_id'].toString(),
       time: map['time'].toString(),
       method: map['method'].toString(),
       user: map['user'] != null && map['user'] is Map<String, dynamic>
@@ -58,4 +58,25 @@ class LearningSession extends BaseModel {
 
   factory LearningSession.fromJson(String source) =>
       LearningSession.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  LearningSession copyWith({
+    String? time,
+    String? method,
+    dynamic user,
+    dynamic topic,
+    List<dynamic>? records,
+  }) {
+    return LearningSession(
+      id: id,
+      time: time ?? this.time,
+      method: method ?? this.method,
+      user: user,
+      topic: topic,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'LearningSession(time: $time, method: $method, user: $user, topic: $topic, records: $records)';
+  }
 }

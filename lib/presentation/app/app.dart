@@ -9,10 +9,12 @@ import 'package:lexa/domain/business/blocs/forgot_password.bloc.dart';
 import 'package:lexa/domain/business/blocs/home.bloc.dart';
 import 'package:lexa/domain/business/blocs/auth.bloc.dart';
 import 'package:lexa/domain/business/blocs/learning.bloc.dart';
+import 'package:lexa/domain/business/blocs/learning_summary.bloc.dart';
 import 'package:lexa/domain/business/blocs/offline_data.bloc.dart';
 import 'package:lexa/domain/business/blocs/reset_password.bloc.dart';
 import 'package:lexa/domain/business/blocs/search.bloc.dart';
 import 'package:lexa/domain/business/blocs/topic.bloc.dart';
+import 'package:lexa/domain/business/blocs/update_profile.bloc.dart';
 import 'package:lexa/presentation/screens/launch_screen.dart';
 import 'package:lexa/domain/business/blocs/profile.bloc.dart';
 import 'package:lexa/domain/business/blocs/create_topic.bloc.dart';
@@ -26,6 +28,9 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (_) => UpdateProfileBloc(),
+        ),
+        BlocProvider(
           create: (_) => FindAccountBloc(),
         ),
         BlocProvider(
@@ -33,6 +38,9 @@ class App extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => ResetPasswordBloc(),
+        ),
+        BlocProvider(
+          create: (_) => LearningSummaryBloc(),
         ),
         BlocProvider(
           create: (_) => LearningBloc(),

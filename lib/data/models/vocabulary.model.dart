@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:lexa/data/models/base.model.dart';
 import 'package:lexa/data/models/multiple_choice_answer.model.dart';
 
@@ -52,4 +53,9 @@ class Vocabulary extends BaseModel {
   String toJson() => json.encode(toMap());
 
   factory Vocabulary.fromJson(String source) => Vocabulary.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'Vocabulary(word: $word, meaning: $meaning, description: $description, imgDescription: $imgDescription, createdTime: $createdTime, multipleChoiceAnswers: $multipleChoiceAnswers)';
+  }
 }

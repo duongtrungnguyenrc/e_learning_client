@@ -19,7 +19,8 @@ class ForgotPasswordDialog extends StatefulWidget {
 class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
   final _formKey = GlobalKey<FormState>();
   late final FindAccountBloc _findAccountBloc;
-  final TextEditingController _keyTextEditingController = TextEditingController();
+  final TextEditingController _keyTextEditingController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -31,7 +32,9 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
   Widget build(BuildContext context) {
     return BlocListener<FindAccountBloc, FindAccountState>(
       listener: (context, state) {
-        if (state.loading == false && state.exception == null && state.users != null) {
+        if (state.loading == false &&
+            state.exception == null &&
+            state.users != null) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -62,7 +65,8 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                       height: 20,
                     ),
                     AuthTextField(
-                      isLoading: state.loading,
+                      isLoading:
+                          state.exception == null ? state.loading : false,
                       controller: _keyTextEditingController,
                       hintText: "Email, phone or account id",
                       validator: (value) {
@@ -73,7 +77,7 @@ class _ForgotPasswordDialogState extends State<ForgotPasswordDialog> {
                       },
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Row(
                       children: [

@@ -18,16 +18,18 @@ class LoadLearningHistory extends LearningEvent {
   });
 }
 
-class LearningRecord extends LearningEvent {
+class LearningVocabularyRecord extends LearningEvent {
+  final String topicId;
   final String? vocabularyId;
   final String? sessionId;
   final String? answer;
   final bool istrue;
 
-  LearningRecord(
+  LearningVocabularyRecord(
     this.vocabularyId,
     this.sessionId,
     this.answer,
     this.istrue,
+    this.topicId,
   );
 }

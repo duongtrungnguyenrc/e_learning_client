@@ -27,12 +27,9 @@ class ProfileState {
   }
 
   ProfileState addNode(Profile? node) {
-    if(node == null) return this;
-    final nodeId = node.id;
-    profileGraph[nodeId] = node;
-    currentNode = node.id;
-
-    return this;
+    final newGraph = Map<String, Profile>.from(profileGraph);
+    newGraph.update(node!.id, (sessions) => node, ifAbsent: () => node);
+    return copyWith(profileGraph: newGraph);
   }
 
   ProfileState removeNode(String nodeId) {

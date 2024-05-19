@@ -66,8 +66,8 @@ class _CreateFolderDialogState extends State<CreateFolderDialog> {
               Expanded(
                 child: TextButton(
                   style: ButtonStyle(
-                    padding: const WidgetStatePropertyAll(EdgeInsets.all(13)),
-                    shape: WidgetStateProperty.all(
+                    padding: const MaterialStatePropertyAll(EdgeInsets.all(13)),
+                    shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),
@@ -100,8 +100,8 @@ class _CreateFolderDialogState extends State<CreateFolderDialog> {
                     Navigator.pop(context);
                   },
                   style: ButtonStyle(
-                    padding: const WidgetStatePropertyAll(EdgeInsets.all(13)),
-                    shape: WidgetStateProperty.all(
+                    padding: const MaterialStatePropertyAll(EdgeInsets.all(13)),
+                    shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0),
                       ),

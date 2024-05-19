@@ -30,9 +30,12 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _otpTextEditingController = TextEditingController();
-  final TextEditingController _passwordTextEditingController = TextEditingController();
-  final TextEditingController _confirmPasswordTextEditingController = TextEditingController();
+  final TextEditingController _otpTextEditingController =
+      TextEditingController();
+  final TextEditingController _passwordTextEditingController =
+      TextEditingController();
+  final TextEditingController _confirmPasswordTextEditingController =
+      TextEditingController();
 
   late ForgotPasswordBloc _forgotPasswordBloc;
   late ResetPasswordBloc _resetPasswordBloc;
@@ -83,7 +86,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget _buildResetPasswordForm() {
     return BlocListener<ResetPasswordBloc, ResetPasswordState>(
       listener: (context, state) {
-        if (state.errorMessage == null && state.loading == false && state.message != null) {
+        if (state.errorMessage == null &&
+            state.loading == false &&
+            state.message != null) {
           toastification.show(
             context: context,
             type: ToastificationType.success,
@@ -117,7 +122,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CountDownClock(
-                title: "Please check your email to get OTP code, Your OTP code valid in: ",
+                title:
+                    "Please check your email to get OTP code, Your OTP code valid in: ",
                 interval: const Duration(minutes: 15),
                 onDone: () {
                   showDialog(
@@ -132,7 +138,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         Navigator.pop(context);
                       },
                       title: "service not available !",
-                      message: "OTP is no longer available, Do you want to inherit the transaction?",
+                      message:
+                          "OTP is no longer available, Do you want to inherit the transaction?",
                     ),
                   );
                 },
@@ -191,13 +198,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               const SizedBox(
                 height: 15,
               ),
-              BlocBuilder<ResetPasswordBloc, ResetPasswordState>(builder: (context, state) {
-                return PrimaryButton(
-                  onPressed: _onSave,
-                  text: "Save password",
-                  loading: state.loading,
-                );
-              }),
+              BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
+                builder: (context, state) {
+                  return PrimaryButton(
+                    padding: const EdgeInsets.all(15),
+                    onPressed: _onSave,
+                    text: "Save password",
+                    loading: state.loading,
+                  );
+                },
+              ),
             ],
           ),
         ),

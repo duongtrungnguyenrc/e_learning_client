@@ -66,7 +66,8 @@ class _FindAccountPageState extends State<FindAccountPage> {
           color: ColorConstants.white,
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: BlocBuilder<FindAccountBloc, FindAccountState>(builder: (context, state) {
+            child: BlocBuilder<FindAccountBloc, FindAccountState>(
+                builder: (context, state) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -87,10 +88,11 @@ class _FindAccountPageState extends State<FindAccountPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: state.users?.length ?? 0,
-                    itemBuilder: (_, index) => _foundUserItem(state.users![index], index),
+                    itemBuilder: (_, index) =>
+                        _foundUserItem(state.users![index], index),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   PrimaryButton(
                     size: double.infinity,
@@ -123,7 +125,9 @@ class _FindAccountPageState extends State<FindAccountPage> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: _selectedUserIndex == index ? ColorConstants.primary : const Color.fromRGBO(0, 0, 0, 0.15),
+              color: _selectedUserIndex == index
+                  ? ColorConstants.primary
+                  : const Color.fromRGBO(0, 0, 0, 0.15),
               offset: const Offset(0, 0),
               blurRadius: 10.0,
             ),

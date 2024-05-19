@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lexa/core/commons/constant.dart';
+import 'package:lexa/domain/business/blocs/auth.bloc.dart';
 import 'package:lexa/domain/business/blocs/profile.bloc.dart';
+import 'package:lexa/domain/business/events/login_bloc.event.dart';
 import 'package:lexa/domain/business/states/profile_bloc.state.dart';
 import 'package:lexa/presentation/screens/sign_in_screen.dart';
 import 'package:lexa/presentation/views/setting_group.dart';
@@ -121,6 +123,7 @@ class _SettingTabState extends State<SettingTab> {
   }
 
   void _logOut() async {
+    context.read<AuthBloc>().add(SignOut());
     Navigator.push(
       context,
       MaterialPageRoute(

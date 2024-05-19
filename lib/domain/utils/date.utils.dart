@@ -11,9 +11,9 @@ String checkDate(DateTime date) {
   // Check if the date is in the previous week
   DateTime startOfCurrentWeek =
       today.subtract(Duration(days: today.weekday - 1));
-  DateTime startOfPreviousWeek = startOfCurrentWeek.subtract(Duration(days: 7));
+  DateTime startOfPreviousWeek = startOfCurrentWeek.subtract(const Duration(days: 7));
   DateTime endOfPreviousWeek =
-      startOfCurrentWeek.subtract(Duration(seconds: 1));
+      startOfCurrentWeek.subtract(const Duration(seconds: 1));
   if (inputDateOnly.isAfter(startOfPreviousWeek) &&
       inputDateOnly.isBefore(endOfPreviousWeek)) {
     return 'Last Week';
@@ -23,7 +23,7 @@ String checkDate(DateTime date) {
   DateTime startOfCurrentMonth = DateTime(now.year, now.month, 1);
   DateTime startOfPreviousMonth = DateTime(now.year, now.month - 1, 1);
   DateTime endOfPreviousMonth =
-      startOfCurrentMonth.subtract(Duration(seconds: 1));
+      startOfCurrentMonth.subtract(const Duration(seconds: 1));
   if (inputDateOnly.isAfter(startOfPreviousMonth) &&
       inputDateOnly.isBefore(endOfPreviousMonth)) {
     return 'Last Month';

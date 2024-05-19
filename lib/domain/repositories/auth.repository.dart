@@ -5,9 +5,9 @@ import 'package:lexa/data/dtos/base_response.dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  static Future<BaseResponse<SignInResponseDto, Object>> auth(
+  static Future<BaseResponse<SignInResponseDto, Object>> signIn(
       String email, String password) async {
-    final response = await api.post("/auth/auth", data: {
+    final response = await api.post("/auth/sign-in", data: {
       "email": email,
       "password": password,
     });
@@ -15,6 +15,17 @@ class AuthRepository {
     return BaseResponse<SignInResponseDto, Object>.fromMap(
       response.data,
       SignInResponseDto.fromMap,
+    );
+  }
+
+  static Future<BaseResponse<String, Object>> signOut() async {
+    final response = await api.post("/auth/sign-out");
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.clear();
+
+    return BaseResponse<String, Object>.fromMap(
+      response.data,
+      null,
     );
   }
 

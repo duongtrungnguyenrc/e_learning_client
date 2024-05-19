@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lexa/core/commons/constant.dart';
 import 'package:lexa/domain/business/blocs/learning.bloc.dart';
 import 'package:lexa/domain/business/events/learning_bloc.event.dart';
 import 'package:lexa/domain/business/states/learning_bloc.state.dart';
+import 'package:lexa/presentation/screens/learning_summary_screen.dart';
 import 'package:lexa/presentation/views/learning_header.dart';
 import 'package:lexa/presentation/views/flash_card_scheduled_review.dart';
 import 'package:lexa/presentation/views/flip_card_segment.dart';
@@ -15,19 +17,20 @@ import 'package:lexa/presentation/views/draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:lexa/domain/utils/text_to_speech.utils.dart';
 
-class FlashCardLearningPage extends StatefulWidget {
+class FlashCardLearningScreen extends StatefulWidget {
   final Topic topic;
 
-  const FlashCardLearningPage({
+  const FlashCardLearningScreen({
     super.key,
     required this.topic,
   });
 
   @override
-  State<FlashCardLearningPage> createState() => _FlashCardLearningPageState();
+  State<FlashCardLearningScreen> createState() =>
+      _FlashCardLearningScreenState();
 }
 
-class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
+class _FlashCardLearningScreenState extends State<FlashCardLearningScreen> {
   int _currentIndex = 0;
   bool _isAutomationMode = false;
   DragDirection _dragDirection = DragDirection.center;
@@ -39,6 +42,7 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
   void initState() {
     super.initState();
     _learningBloc = context.read<LearningBloc>();
+    _learningBloc.add(LoadLearningHistory(topicId: widget.topic.id));
   }
 
   void _handlePrevPage() {
@@ -53,17 +57,25 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
   void _handleNextPage(bool isDone) {
     if (_currentIndex < widget.topic.vocabularies.length - 1) {
       _learningBloc.add(
-        LearningRecord(
+        LearningVocabularyRecord(
           widget.topic.vocabularies[_currentIndex].id,
-          _learningBloc.state.getNode(widget.topic.id)?.id,
+          _learningBloc.state.getNode(widget.topic.id)?.last.id,
           widget.topic.vocabularies[_currentIndex].meaning,
           isDone,
+          widget.topic.id,
         ),
       );
       setState(() {
         _currentIndex += 1;
         _handleSpeak();
       });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LearningSummaryScreen(topicId: widget.topic.id),
+        ),
+      );
     }
   }
 
@@ -128,7 +140,7 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
       appBar: LearningHeader(
         onBack: _handleBackPage,
         count: widget.topic.vocabularies.length,
-        progress: _currentIndex + 1,
+        progress: _currentIndex,
       ),
       body: SafeArea(
         child: BlocBuilder<LearningBloc, LearningState>(
@@ -150,14 +162,14 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
       front: Text(
         widget.topic.vocabularies[_currentIndex].word,
         style: const TextStyle(
-          fontSize: 48,
+          fontSize: 50,
           fontWeight: FontWeight.bold,
         ),
       ),
       back: Text(
         widget.topic.vocabularies[_currentIndex].meaning,
         style: const TextStyle(
-          fontSize: 48,
+          fontSize: 50,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -168,7 +180,7 @@ class _FlashCardLearningPageState extends State<FlashCardLearningPage> {
     void handleStopDrag() {
       setState(() {
         if (_dragDirection != DragDirection.center) {
-          _handleNextPage(_dragDirection == DragDirection.left);
+          _handleNextPage(_dragDirection == DragDirection.right);
         }
         _dragDirection = DragDirection.center;
       });

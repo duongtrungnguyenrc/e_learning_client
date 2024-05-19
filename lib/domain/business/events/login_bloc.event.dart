@@ -19,3 +19,5 @@ class DefaultAuth extends AuthEvent {
 }
 
 class TokenAuth extends AuthEvent {}
+
+class SignOut extends AuthEvent {}

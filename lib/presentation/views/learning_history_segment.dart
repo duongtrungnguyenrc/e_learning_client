@@ -1,13 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:lexa/core/commons/constant.dart';
 import 'package:lexa/data/models/learning_session.model.dart';
 import 'package:lexa/domain/business/blocs/learning.bloc.dart';
-import 'package:lexa/domain/business/events/learning_bloc.event.dart';
 import 'package:lexa/domain/business/states/learning_bloc.state.dart';
 import 'package:lexa/presentation/views/segment_header.dart';
 import 'package:flutter/material.dart';
-import 'package:lexa/domain/utils/date.utils.dart';
+
+import '../../data/models/learning_record.model.dart';
 
 class LearningHistorySegment extends StatefulWidget {
   final String? topicId;
@@ -20,15 +19,12 @@ class LearningHistorySegment extends StatefulWidget {
 class _LearningHistorySegmentState extends State<LearningHistorySegment>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late LearningBloc _learningBloc;
+  bool _isExpanded = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 3);
-    _learningBloc = context.read<LearningBloc>();
-
-    _learningBloc.add(LoadLearningHistory(topicId: widget.topicId));
   }
 
   @override
@@ -40,20 +36,7 @@ class _LearningHistorySegmentState extends State<LearningHistorySegment>
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LearningBloc, LearningState>(builder: (context, state) {
-      List<List<LearningSession>> learningSessions = [[], [], []];
-
-      for (var node in state.nodes) {
-        DateTime nodeDate = DateFormat('HH:mm dd/MM/yyyy').parse(node.time);
-        String period = checkDate(nodeDate);
-
-        if (period == 'Today') {
-          learningSessions[0].add(node);
-        } else if (period == 'Last Week') {
-          learningSessions[1].add(node);
-        } else if (period == 'Last Month') {
-          learningSessions[2].add(node);
-        }
-      }
+      final topicSessions = state.getNode(widget.topicId);
       return Column(
         children: [
           const SegmentHeader(
@@ -62,65 +45,74 @@ class _LearningHistorySegmentState extends State<LearningHistorySegment>
           const SizedBox(
             height: 10,
           ),
-          Material(
-            elevation: 1,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(13),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: ColorConstants.white,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(13),
-                ),
+          Container(
+            decoration: BoxDecoration(
+              color: ColorConstants.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(13),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    TabBar(
-                      controller: _tabController,
-                      unselectedLabelStyle: TextStyle(
-                        color: ColorConstants.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      labelStyle: TextStyle(
-                        color: ColorConstants.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      indicatorColor: ColorConstants.primary,
-                      isScrollable: true,
-                      tabAlignment: TabAlignment.center,
-                      tabs: const [
-                        Tab(
-                          text: "Last day",
-                        ),
-                        Tab(
-                          text: "Last week",
-                        ),
-                        Tab(
-                          text: "Last month",
-                        ),
-                      ],
+              border: Border.all(
+                color: ColorConstants.primaryGrey,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 15,
+              ),
+              child: Column(
+                children: [
+                  TabBar(
+                    controller: _tabController,
+                    unselectedLabelStyle: TextStyle(
+                      color: ColorConstants.black,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(
-                      height: 10,
+                    labelStyle: TextStyle(
+                      color: ColorConstants.primary,
+                      fontWeight: FontWeight.w600,
                     ),
-                    learningSessions.isNotEmpty
-                        ? ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount:
-                                learningSessions[_tabController.index].length,
-                            itemBuilder: (context, index) {
-                              var learningSession =
-                                  learningSessions[_tabController.index][index];
+                    indicatorColor: ColorConstants.primary,
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.center,
+                    tabs: const [
+                      Tab(
+                        text: "Last day",
+                      ),
+                      Tab(
+                        text: "Last week",
+                      ),
+                      Tab(
+                        text: "Last month",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: _isExpanded ? double.infinity : 200,
+                    ),
+                    child: topicSessions != null && topicSessions.isNotEmpty
+                        ? Scrollbar(
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: 10,
+                              ),
+                              physics: _isExpanded
+                                  ? const NeverScrollableScrollPhysics()
+                                  : const ScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: topicSessions.length,
+                              itemBuilder: (context, index) {
+                                var learningSession = topicSessions[index];
 
-                              return Container(
-                                padding: const EdgeInsets.all(15),
-                                child: Text(learningSession.time),
-                              );
-                            },
+                                return _buildLearningHistoryItem(
+                                    learningSession);
+                              },
+                            ),
                           )
                         : Text(
                             "No records",
@@ -129,13 +121,141 @@ class _LearningHistorySegmentState extends State<LearningHistorySegment>
                               color: ColorConstants.primaryGrey,
                             ),
                           ),
-                  ],
-                ),
+                  ),
+                  Center(
+                    child: topicSessions != null && topicSessions.isNotEmpty
+                        ? TextButton(
+                            child: Text(
+                              _isExpanded ? "Minimize" : "View more",
+                              style: TextStyle(
+                                color: ColorConstants.primary,
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isExpanded = !_isExpanded;
+                              });
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                ],
               ),
             ),
           ),
         ],
       );
     });
+  }
+
+  Widget _buildLearningHistoryItem(LearningSession learningSession) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: ColorConstants.primaryGrey,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Wrap(
+        direction: Axis.vertical,
+        spacing: 10,
+        children: [
+          RichText(
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                  text: "Time to learn:  ",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                TextSpan(
+                  text: learningSession.time,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          RichText(
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                  text: "Method:  ",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                TextSpan(
+                  text:
+                      LearningMethodExtension.fromString(learningSession.method)
+                          ?.getString(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.green,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  children: <TextSpan>[
+                    const TextSpan(text: "Correct: "),
+                    TextSpan(
+                      text: learningSession.records
+                          .where((record) =>
+                              record is LearningRecord ? record.isTrue : false)
+                          .length
+                          .toString(),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: ColorConstants.red,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  children: <TextSpan>[
+                    const TextSpan(
+                      text: "Incorrect: ",
+                    ),
+                    TextSpan(
+                      text: learningSession.records
+                          .where((record) =>
+                              record is LearningRecord ? !record.isTrue : false)
+                          .length
+                          .toString(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

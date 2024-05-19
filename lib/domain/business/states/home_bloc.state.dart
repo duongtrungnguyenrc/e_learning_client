@@ -24,4 +24,8 @@ class HomeBlocState {
       activities: activities ?? this.activities,
     );
   }
+
+  HomeBlocState clear() {
+    return HomeBlocState();
+  }
 }

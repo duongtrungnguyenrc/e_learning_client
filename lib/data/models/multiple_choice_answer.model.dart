@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:lexa/data/models/base.model.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class MultipleChoiceAnswer extends BaseModel{
+class MultipleChoiceAnswer extends BaseModel {
   String content;
   bool isTrue;
 
@@ -33,4 +33,8 @@ class MultipleChoiceAnswer extends BaseModel{
 
   factory MultipleChoiceAnswer.fromJson(String source) =>
       MultipleChoiceAnswer.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() =>
+      'MultipleChoiceAnswer(content: $content, isTrue: $isTrue)';
 }

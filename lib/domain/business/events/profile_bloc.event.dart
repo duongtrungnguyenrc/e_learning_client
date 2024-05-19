@@ -1,3 +1,5 @@
+import 'package:lexa/data/models/user.model.dart';
+
 class ProfileEvent {}
 
 class LoadProfile extends ProfileEvent {
@@ -9,3 +11,9 @@ class LoadProfile extends ProfileEvent {
 class ClearProfile extends ProfileEvent {}
 
 class LoadProfileTopics extends ProfileEvent {}
+
+class UpdateSystemProfile extends ProfileEvent {
+  final User newProfile;
+
+  UpdateSystemProfile(this.newProfile);
+}

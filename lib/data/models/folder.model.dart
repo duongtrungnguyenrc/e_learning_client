@@ -12,9 +12,7 @@ class Folder extends BaseModel {
   Folder({required super.id, required this.name, required this.author, required this.root});
 
   @override
-  String toString() {
-    return toJson();
-  }
+  String toString() => 'Folder(name: $name, author: $author, root: $root)';
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

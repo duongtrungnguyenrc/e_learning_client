@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lexa/core/commons/constant.dart';
@@ -8,6 +9,7 @@ import 'package:lexa/domain/business/blocs/learning.bloc.dart';
 import 'package:lexa/domain/business/events/learning_bloc.event.dart';
 import 'package:lexa/presentation/screens/flash_card_learning_screen.dart';
 import 'package:lexa/presentation/screens/multiple_choice_learning_screen.dart';
+import 'package:lexa/presentation/screens/typing_learning_screen.dart';
 import 'package:lexa/presentation/views/count_down_clock.dart';
 
 class LearningCountDownScreen extends StatefulWidget {
@@ -21,7 +23,8 @@ class LearningCountDownScreen extends StatefulWidget {
   });
 
   @override
-  State<LearningCountDownScreen> createState() => _LearningCountDownScreenState();
+  State<LearningCountDownScreen> createState() =>
+      _LearningCountDownScreenState();
 }
 
 class _LearningCountDownScreenState extends State<LearningCountDownScreen> {
@@ -34,10 +37,9 @@ class _LearningCountDownScreenState extends State<LearningCountDownScreen> {
   void initState() {
     super.initState();
     _learningBloc = context.read<LearningBloc>();
-
     _learningBloc.add(
       CreateLearningSession(
-        method: widget.learningMethod.toString(),
+        method: LearningMethodWrapper(widget.learningMethod).toRawString(),
         topicId: widget.topic.id,
       ),
     );
@@ -46,11 +48,11 @@ class _LearningCountDownScreenState extends State<LearningCountDownScreen> {
   Widget? _getLearningMethodStrategy() {
     switch (widget.learningMethod) {
       case LearningMethod.METHOD_FLASH_CARD:
-        return FlashCardLearningPage(topic: widget.topic);
+        return FlashCardLearningScreen(topic: widget.topic);
       case LearningMethod.METHOD_MULTIPLE_CHOICE:
-        return const MultipleChoiceLearningPage();
-      case LearningMethod.METHOD_FLASH_CARD:
-        return FlashCardLearningPage(topic: widget.topic);
+        return MultipleChoiceLearningScreen(topic: widget.topic);
+      case LearningMethod.METHOD_TYPING:
+        return TypingLearningScreen(topic: widget.topic);
       default:
         return null;
     }
@@ -88,6 +90,11 @@ class _LearningCountDownScreenState extends State<LearningCountDownScreen> {
                     )
                   : CountDownClock(
                       interval: const Duration(seconds: 3),
+                      onDown: () {
+                        AudioPlayer().play(
+                          AssetSource("/sounds/ping_sound.mp3"),
+                        );
+                      },
                       onDone: () {
                         setState(() {
                           _ready = true;

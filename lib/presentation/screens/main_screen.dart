@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lexa/core/commons/constant.dart';
+import 'package:lexa/domain/business/blocs/home.bloc.dart';
+import 'package:lexa/domain/business/events/home_bloc.event.dart';
 import 'package:lexa/presentation/tabs/library_tab.dart';
 import 'package:lexa/presentation/views/home_header.dart';
 import 'package:lexa/presentation/screens/manage_topic_screen.dart';
@@ -16,6 +19,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  late Homebloc _homeBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _homeBloc = context.read<Homebloc>();
+  }
 
   static const List<Widget> _screens = <Widget>[
     HomeTab(),
@@ -64,5 +74,11 @@ class _MainPageState extends State<MainPage> {
         items: MainPageConstants.navigationItems,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _homeBloc.add(ClearHomeData());
+    super.dispose();
   }
 }

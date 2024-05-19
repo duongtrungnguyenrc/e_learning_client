@@ -40,9 +40,9 @@ class _SearchResultListState extends State<SearchResultList> {
                     TextButton(
                       onPressed: () {},
                       style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
                         overlayColor:
-                            WidgetStateProperty.all(Colors.transparent),
+                            MaterialStateProperty.all(Colors.transparent),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

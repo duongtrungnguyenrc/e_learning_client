@@ -23,5 +23,9 @@ class Homebloc extends Bloc<HomeBlocEvent, HomeBlocState> {
         print(e);
       }
     });
+
+    on<ClearHomeData>((event, emit) {
+      emit(state.clear());
+    }); 
   }
 }

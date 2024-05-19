@@ -31,20 +31,20 @@ class CircularIconButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => enable ? onTap() : null,
       style: ButtonStyle(
-        elevation: WidgetStateProperty.all(elevation == 0 ? elevation : 1),
-        backgroundColor: WidgetStateProperty.all(enable
+        elevation: MaterialStateProperty.all(elevation == 0 ? elevation : 1),
+        backgroundColor: MaterialStateProperty.all(enable
             ? background ?? ColorConstants.white
             : ColorConstants.lightGrey),
-        surfaceTintColor: WidgetStateProperty.all(ColorConstants.primaryGrey),
-        overlayColor: WidgetStateProperty.all(
+        surfaceTintColor: MaterialStateProperty.all(ColorConstants.primaryGrey),
+        overlayColor: MaterialStateProperty.all(
             enable ? ColorConstants.primaryGrey : Colors.transparent),
-        minimumSize: WidgetStateProperty.all(
+        minimumSize: MaterialStateProperty.all(
           Size(size, size),
         ),
-        maximumSize: WidgetStateProperty.all(
+        maximumSize: MaterialStateProperty.all(
           Size(size, size),
         ),
-        shape: WidgetStateProperty.all(
+        shape: MaterialStateProperty.all(
           CircleBorder(
             side: borderSide ??
                 const BorderSide(
@@ -53,7 +53,7 @@ class CircularIconButton extends StatelessWidget {
                 ),
           ),
         ),
-        padding: WidgetStateProperty.all(EdgeInsets.zero),
+        padding: MaterialStateProperty.all(EdgeInsets.zero),
       ),
       child: SvgPicture.asset(
         iconPath,

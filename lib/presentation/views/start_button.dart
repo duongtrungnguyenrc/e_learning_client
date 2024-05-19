@@ -25,11 +25,13 @@ class _StartButtonState extends State<StartButton> {
           widget.action();
         },
         style: ButtonStyle(
-          backgroundColor:
-              WidgetStateProperty.all<Color>(ColorConstants.primary),
-          elevation: WidgetStateProperty.all<double>(0),
-          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-              const EdgeInsets.all(6)),
+          backgroundColor: MaterialStateProperty.all<Color>(
+            ColorConstants.primary,
+          ),
+          elevation: MaterialStateProperty.all<double>(0),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+            const EdgeInsets.all(6),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(4),

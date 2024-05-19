@@ -5,7 +5,7 @@ import 'package:lexa/data/models/base.model.dart';
 import 'package:lexa/data/models/vocabulary.model.dart';
 
 class LearningRecord extends BaseModel {
-  final Vocabulary vocabulary;
+  final dynamic vocabulary;
   final String answer;
   final bool isTrue;
 
@@ -26,8 +26,10 @@ class LearningRecord extends BaseModel {
 
   factory LearningRecord.fromMap(Map<String, dynamic> map) {
     return LearningRecord(
-      id: map['id'],
-      vocabulary: Vocabulary.fromMap(map['vocabulary']),
+      id: map['_id'].toString(),
+      vocabulary: map['vocabulary'] is Map<String, dynamic>
+          ? Vocabulary.fromMap(map['vocabulary'])
+          : map['vocabulary'].toString(),
       answer: map['answer'].toString(),
       isTrue: map['isTrue'] as bool,
     );
@@ -36,6 +38,9 @@ class LearningRecord extends BaseModel {
   String toJson() => json.encode(toMap());
 
   factory LearningRecord.fromJson(String source) =>
-      LearningRecord.fromMap(
-          json.decode(source) as Map<String, dynamic>);
+      LearningRecord.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() =>
+      'LearningRecord(vocabulary: $vocabulary, answer: $answer, isTrue: $isTrue)';
 }
